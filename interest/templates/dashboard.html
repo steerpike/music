@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_content %}
+<h1>Dashboard</h1>
+{% for tag in machinetags %}
+    <div>
+        <h5>
+            <a href="{% url 'tag_detail' tag.label %}">{{ tag.label }}</a>
+        </h5>
+    </div>
+{% endfor %}
+{% endblock %}

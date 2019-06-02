@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_content %}
+<h1>{{ link.title }}</h1>
+<div>
+    <div>
+        <h5>About the link:</h5>
+        <p>{{ link.description }}</p>
+    </div>
+</div>
+{% endblock %}

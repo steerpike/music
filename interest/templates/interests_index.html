@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_content %}
+<form action="" method="POST">
+{% csrf_token %}
+<h1>Machine Tags</h1>
+{% for tag in tags %}
+    <div>
+        <h5>
+            <input type="checkbox" name="tag" value="{{ tag.pk }}" />{{ tag.label }}
+        </h5>
+    </div>
+{% endfor %}
+<h1>Feeds</h1>
+<div>
+    {% for feed in feeds %}
+    <div>
+        <h5>
+            <input type="checkbox" name="feed" value="{{ feed.pk }}" />{{ feed.url }}
+        </h5>
+    </div>
+    {% endfor %}
+</div>
+<h1>Links</h1>
+<div>
+    {% for link in links %}
+    <div>
+        <h5>
+            <input type="checkbox" name="link" value="{{ link.pk }}" />{{ link.title }}
+        </h5>
+    </div>
+    {% endfor %}
+</div>
+   <button type="submit">Go</button>
+</form>
+
+
+
+<h1>Feeds</h1>
+<div>
+    {% for feed in feeds %}
+    <div>
+        <h5>
+            {{ feed.url }}
+        </h5>
+        {% for mtag in feed.machinetag_set.all %}            
+            <form action="{% url 'interests_delete' %}" method="POST">
+            {% csrf_token %}
+                <p>{{mtag.label}}</p>
+                <input type="hidden" name="delete_tag" value="{{mtag.pk}}" />
+                <input type="hidden" name="delete_feed" value="{{feed.pk}}" />
+                <button type="submit">X</button>
+            </form>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+<h1>Links</h1>
+<div>
+    {% for link in links %}
+    <div>
+        <h5>
+            {{ link.title }}
+        </h5>
+        {% for mtag in link.machinetag_set.all %}
+            <form action="{% url 'interests_delete' %}" method="POST">
+            {% csrf_token %}
+                <p>{{mtag.label}}</p>
+                <input type="hidden" name="delete_tag" value="{{mtag.pk}}" />
+                <input type="hidden" name="delete_link" value="{{link.pk}}" />
+                <button type="submit">X</button>
+            </form>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
