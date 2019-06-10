@@ -3,6 +3,14 @@
 
 {% block page_content %}
 <h1>{{ machinetag.label }}</h1>
+{% for item in machinetag.tagged.all %}
+    {% if item.get_classname == 'Link' %}
+        <p>{{item.title}}</p>
+    {% endif %}
+    {% if item.get_classname == 'Feed' %}
+        <p>{{item.url}}</p>
+    {% endif %}
+{% endfor %}
 <div>
    
 </div>

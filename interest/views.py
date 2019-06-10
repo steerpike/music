@@ -70,7 +70,7 @@ def interest_delete(request):
     return HttpResponseRedirect(reverse('interests'))
 
 def tags_index(request):
-    tags = MachineTag.objects.order_by('label').all()
+    tags = MachineTag.objects.order_by('label').all().prefetch_related('tagged')
     context = {
         'machinetags': tags
     }
@@ -79,8 +79,23 @@ def tags_index(request):
 
 def tag_detail(request, label):
     fragments = re.split(':|=', label)
-    print(fragments)
-    tag = MachineTag.objects.get(label=label)
+    namespace = fragements[0]
+    predicate = fragments[1]
+    value = fragments[2]
+    #All tags *:*=*
+    if namespace == "*" and predicate == "*" and value == "*":
+        tags = MachineTag.objects.order_by(
+            'label').all().prefetch_related('tagged')
+    #All predicate/value *:predicate:value
+    elif namespace == "*":
+        tags = MachineTag.objects.prefetch_related('tagged').get(predicate=predicate, value=value)
+    #All namespace/value namespace:*=value
+    #All namespace/predicate namespace:predicate=*
+    # *:*=value
+    # *:predicate=*
+    # namespace:*=*
+
+    tag = MachineTag.objects.prefetch_related('tagged').get(label=label)
     context = {
         'machinetag': tag
     }
